@@ -126,3 +126,5 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 REST_FRAMEWORK = {
     "DATE_INPUT_FORMATS": ["%d/%m/%Y"],
 }
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
