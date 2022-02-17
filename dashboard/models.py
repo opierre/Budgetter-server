@@ -3,6 +3,7 @@ from django.db import models
 
 class Bank(models.Model):
     name = models.CharField(max_length=1000, default='')
+    logo = models.ImageField(upload_to='uploads/', default=None)
 
 
 class Account(models.Model):
