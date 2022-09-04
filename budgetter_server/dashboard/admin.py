@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import *
+from budgetter_server.dashboard.models import Bank, Account, Transaction, Category
 
 admin.site.register(Bank)
 admin.site.register(Account)

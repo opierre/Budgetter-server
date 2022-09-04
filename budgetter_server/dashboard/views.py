@@ -1,8 +1,8 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.viewsets import ModelViewSet
 
-from dashboard.models import Bank, Account, Category, Transaction
-from dashboard.serializers import BankSerializer, AccountSerializer, CategorySerializer, TransactionSerializer
+from budgetter_server.dashboard.models import Bank, Account, Category, Transaction
+from budgetter_server.dashboard.serializers import BankSerializer, AccountSerializer, CategorySerializer, TransactionSerializer
 
 
 class BankViewSet(ModelViewSet):
