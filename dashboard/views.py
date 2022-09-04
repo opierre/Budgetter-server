@@ -1,35 +1,34 @@
-from django.shortcuts import render
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.viewsets import ModelViewSet
 
-from budgetter.settings import BASE_DIR
-from dashboard.models import *
-from dashboard.serializers import *
+from dashboard.models import Bank, Account, Category, Transaction
+from dashboard.serializers import BankSerializer, AccountSerializer, CategorySerializer, TransactionSerializer
 
 
 class BankViewSet(ModelViewSet):
     queryset = Bank.objects.all()
-    serializer = BankSerializer
+    serializer_class = BankSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['name']
 
 
 class AccountViewSet(ModelViewSet):
     queryset = Account.objects.all()
-    serializer = AccountSerializer
+    serializer_class = AccountSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['name', 'bank']
 
 
 class CategoryViewSet(ModelViewSet):
-    queryset = Account.objects.all()
-    serializer = CategorySerializer
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['name']
 
 
 class TransactionViewSet(ModelViewSet):
-    queryset = Account.objects.all()
-    serializer = CategorySerializer
+    queryset = Transaction.objects.all()
+    serializer_class = TransactionSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['name', 'amount', 'date']
 
