@@ -1,8 +1,8 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.viewsets import ModelViewSet
 
-from budgetter_server.dashboard.models import Bank, Account, Category, Transaction
-from budgetter_server.dashboard.serializers import BankSerializer, AccountSerializer, CategorySerializer, TransactionSerializer
+from .models import Bank, Account, Category, Transaction
+from .serializers import BankSerializer, AccountSerializer, CategorySerializer, TransactionSerializer
 
 
 class BankViewSet(ModelViewSet):
@@ -31,7 +31,3 @@ class TransactionViewSet(ModelViewSet):
     serializer_class = TransactionSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['name', 'amount', 'date']
-
-
-
-

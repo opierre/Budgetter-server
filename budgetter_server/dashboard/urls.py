@@ -1,6 +1,6 @@
 from rest_framework.routers import DefaultRouter
 
-from budgetter_server.dashboard import views
+from . import views
 
 router = DefaultRouter()
 

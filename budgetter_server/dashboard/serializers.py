@@ -1,5 +1,6 @@
 from rest_framework.serializers import ModelSerializer
-from budgetter_server.dashboard.models import Bank, Account, Category, Transaction
+
+from .models import Bank, Account, Category, Transaction
 
 
 class BankSerializer(ModelSerializer):
@@ -24,4 +25,3 @@ class TransactionSerializer(ModelSerializer):
     class Meta:
         model = Transaction
         fields = '__all__'
-
