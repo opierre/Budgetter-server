@@ -27,7 +27,7 @@ DEBUG = database.DEBUG
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = database.DATABASE
+DATABASES = database.DATABASE if database.DEMO is False else database.DATABASE_DEMO
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
