@@ -25,7 +25,10 @@ class IncomeManager(models.Manager):
 
 class Bank(models.Model):
     name = models.CharField(max_length=1000, default='')
-    logo = models.ImageField(upload_to='uploads/', default=None)
+    logo = models.FileField(upload_to='uploads/', default=None)
+
+    def __str__(self):
+        return f"{self.name}"
 
 
 class Account(models.Model):
