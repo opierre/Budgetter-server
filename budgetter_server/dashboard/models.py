@@ -34,6 +34,7 @@ class Account(models.Model):
     name = models.CharField(max_length=1000, default='')
     bank = models.ForeignKey("Bank", on_delete=models.CASCADE)
     amount = models.FloatField(default=0)
+    color = models.CharField(max_length=1000, default='#ffffff')
 
 
 class Category(models.Model):
