@@ -1,3 +1,6 @@
+import datetime
+
+from django.utils.translation import gettext as _
 from django.db import models
 
 
@@ -31,15 +34,15 @@ class Bank(models.Model):
 
 
 class Account(models.Model):
-    name = models.CharField(max_length=1000, default='')
+    name = models.CharField(_("Name"), max_length=1000, default='')
     bank = models.ForeignKey("Bank", on_delete=models.CASCADE)
-    amount = models.FloatField(default=0)
-    color = models.CharField(max_length=1000, default='#ffffff')
+    amount = models.FloatField(_("Amount"), default=0)
+    color = models.CharField(_("Color"), max_length=1000, default='#ffffff')
+    last_update = models.DateField(_("Date"), default=datetime.date.today)
 
 
 class Category(models.Model):
     name = models.CharField(max_length=1000, default='')
-    logo = models.ImageField(upload_to='uploads/')
 
 
 class Transaction(models.Model):

@@ -8,7 +8,7 @@ class BankAdmin(admin.ModelAdmin):
 
 
 class AccountAdmin(admin.ModelAdmin):
-    list_display = ('name', 'bank', 'amount', 'color')
+    list_display = ('name', 'bank', 'amount', 'color', 'last_update')
     list_filter = ('bank', )
 
 
