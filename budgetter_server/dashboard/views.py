@@ -1,6 +1,7 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.viewsets import ModelViewSet
 
+from utils.category_predictor import CategoryPredictor, parse_file
 from .models import Bank, Account, Category, Transaction
 from .serializers import BankSerializer, AccountSerializer, CategorySerializer, TransactionSerializer
 
@@ -31,3 +32,18 @@ class TransactionViewSet(ModelViewSet):
     serializer_class = TransactionSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['name', 'amount', 'date']
+
+    def create(self, request, *args, **kwargs):
+        """
+        Override create to find matching category first
+
+        :param request: request
+        :param args: args
+        :param kwargs: kwargs
+        :return: None
+        """
+
+        training_path = r''
+        training_dataset = parse_file(training_path)
+
+        predictor = CategoryPredictor(training_dataset, [transaction])
