@@ -1,3 +1,4 @@
+from rest_framework.fields import CharField
 from rest_framework.serializers import ModelSerializer
 
 from .models import Bank, Account, Category, Transaction
@@ -22,6 +23,8 @@ class CategorySerializer(ModelSerializer):
 
 
 class TransactionSerializer(ModelSerializer):
+    account_name = CharField(source="account.name")
+
     class Meta:
         model = Transaction
         fields = '__all__'
