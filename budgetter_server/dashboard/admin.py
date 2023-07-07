@@ -12,7 +12,12 @@ class AccountAdmin(admin.ModelAdmin):
     list_filter = ('bank', )
 
 
+class TransactionAdmin(admin.ModelAdmin):
+    list_display = ('name', 'amount', 'date', 'account', 'mean')
+    list_filter = ('amount', 'date', 'account')
+
+
 admin.site.register(Bank, BankAdmin)
 admin.site.register(Account, AccountAdmin)
-admin.site.register(Transaction)
+admin.site.register(Transaction, TransactionAdmin)
 admin.site.register(Category)
