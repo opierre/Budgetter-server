@@ -23,7 +23,6 @@ class CategorySerializer(ModelSerializer):
 
 
 class TransactionSerializer(ModelSerializer):
-    account_name = CharField(source="account.name")
 
     class Meta:
         model = Transaction

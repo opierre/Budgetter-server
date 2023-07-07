@@ -33,17 +33,17 @@ class TransactionViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['name', 'amount', 'date']
 
-    def create(self, request, *args, **kwargs):
-        """
-        Override create to find matching category first
-
-        :param request: request
-        :param args: args
-        :param kwargs: kwargs
-        :return: None
-        """
-
-        training_path = r''
-        training_dataset = parse_file(training_path)
-
-        predictor = CategoryPredictor(training_dataset, [transaction])
+    # def create(self, request, *args, **kwargs):
+    #     """
+    #     Override create to find matching category first
+    #
+    #     :param request: request
+    #     :param args: args
+    #     :param kwargs: kwargs
+    #     :return: None
+    #     """
+    #
+    #     training_path = r'D:\Documents\Administratif\Crédit_Agricole\Relevé_comptes\CA20221230_130042_compte_courant.csv'
+    #     training_dataset = parse_file(training_path)
+    #
+    #     predictor = CategoryPredictor(training_dataset, [transaction])
