@@ -51,7 +51,7 @@ class Transaction(models.Model):
     date = models.DateField()
     account = models.ForeignKey("Account", on_delete=models.CASCADE)
     category = models.ForeignKey("Category", on_delete=models.CASCADE, null=True, blank=True)
-    comment = models.CharField(max_length=4000, default='')
+    comment = models.CharField(max_length=4000, default='', null=True, blank=True)
     mean = models.CharField(max_length=1000, choices=Mean.choices, default=Mean.CARD)
     transaction_type = models.CharField(max_length=1000, choices=Type.choices, default=Type.EXPENSES)
 
