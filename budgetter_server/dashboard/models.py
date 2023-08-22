@@ -7,13 +7,13 @@ from django.db import models
 class Mean(models.TextChoices):
     CARD = 'CARD'
     CASH = 'CASH'
-    TRANSFER = 'TR'
+    TRANSFER = 'TRANSFER'
 
 
 class Type(models.TextChoices):
     EXPENSES = 'EXPENSES'
     INCOME = 'INCOME'
-    TRANSFER = 'TRANSFER'
+    INTERNAL = 'INTERNAL'
 
 
 class ExpensesManager(models.Manager):
