@@ -28,6 +28,8 @@ class IncomeManager(models.Manager):
 
 class Bank(models.Model):
     name = models.CharField(max_length=1000, default='')
+    swift = models.CharField(max_length=1000, default='')
+    bic = models.JSONField(default=list)
 
     def __str__(self):
         return f"{self.name}"
