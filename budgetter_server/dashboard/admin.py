@@ -4,7 +4,7 @@ from .models import Bank, Account, Transaction, Category
 
 
 class BankAdmin(admin.ModelAdmin):
-    list_display = ('name', )
+    list_display = ('name', 'bic', 'swift')
 
 
 class AccountAdmin(admin.ModelAdmin):
