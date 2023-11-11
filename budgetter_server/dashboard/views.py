@@ -1,4 +1,6 @@
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import status
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from utils.category_predictor import CategoryPredictor, parse_file
@@ -33,17 +35,25 @@ class TransactionViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['name', 'amount', 'date']
 
-    # def create(self, request, *args, **kwargs):
-    #     """
-    #     Override create to find matching category first
-    #
-    #     :param request: request
-    #     :param args: args
-    #     :param kwargs: kwargs
-    #     :return: None
-    #     """
-    #
+    def create(self, request, *args, **kwargs):
+        """
+        Override create to find matching category first and multiple objects
+
+        :param request: request
+        :param args: args
+        :param kwargs: kwargs
+        :return: None
+        """
+
+        serializer = self.get_serializer(data=request.data, many=isinstance(request.data, list))
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
     #     training_path = r'D:\Documents\Administratif\Crédit_Agricole\Relevé_comptes\CA20221230_130042_compte_courant.csv'
     #     training_dataset = parse_file(training_path)
     #
     #     predictor = CategoryPredictor(training_dataset, [transaction])
+
+
