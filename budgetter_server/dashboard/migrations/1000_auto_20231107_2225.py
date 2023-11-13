@@ -33,7 +33,7 @@ def load_banks(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("dashboard", "0010_bank_bic_bank_swift"),
+        ("dashboard", "0013_alter_bank_logo"),
     ]
 
     operations = [

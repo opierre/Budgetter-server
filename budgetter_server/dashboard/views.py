@@ -14,6 +14,21 @@ class BankViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['name']
 
+    # def list(self, request, *args, **kwargs):
+    #     """
+    #     Override list method to include SVG content for logo
+    #
+    #     :param request: request
+    #     :param args: args
+    #     :param kwargs: kwargs
+    #     :return: Response
+    #     """
+    #
+    #     serializer = self.get_serializer(data=request.data, many=True)
+    #     serializer.is_valid(raise_exception=True)
+
+
+
 
 class AccountViewSet(ModelViewSet):
     queryset = Account.objects.all()
@@ -42,7 +57,7 @@ class TransactionViewSet(ModelViewSet):
         :param request: request
         :param args: args
         :param kwargs: kwargs
-        :return: None
+        :return: Response
         """
 
         serializer = self.get_serializer(data=request.data, many=isinstance(request.data, list))
