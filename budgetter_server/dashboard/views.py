@@ -6,6 +6,7 @@ from rest_framework.viewsets import ModelViewSet
 from utils.category_predictor import CategoryPredictor, parse_file
 from .models import Bank, Account, Category, Transaction
 from .serializers import BankSerializer, AccountSerializer, CategorySerializer, TransactionSerializer
+from .signals import transactions_created
 
 
 class BankViewSet(ModelViewSet):
@@ -13,21 +14,6 @@ class BankViewSet(ModelViewSet):
     serializer_class = BankSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['name']
-
-    # def list(self, request, *args, **kwargs):
-    #     """
-    #     Override list method to include SVG content for logo
-    #
-    #     :param request: request
-    #     :param args: args
-    #     :param kwargs: kwargs
-    #     :return: Response
-    #     """
-    #
-    #     serializer = self.get_serializer(data=request.data, many=True)
-    #     serializer.is_valid(raise_exception=True)
-
-
 
 
 class AccountViewSet(ModelViewSet):
@@ -63,6 +49,7 @@ class TransactionViewSet(ModelViewSet):
         serializer = self.get_serializer(data=request.data, many=isinstance(request.data, list))
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
+        transactions_created.send(self.__class__)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
