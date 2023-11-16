@@ -1,4 +1,5 @@
 import datetime
+from calendar import monthrange
 from pprint import pprint
 
 from channels.layers import get_channel_layer
@@ -27,11 +28,12 @@ def transaction_post_save(**kwargs):
 
     for month in range(today.month-5, today.month+1):
         amount = Transaction.objects.filter(
-            date__lte=f"{today.year}-{month}-01",
-            date__gte=f"{today.year}-{month - 1}-01",
+            date__lte=f"{today.year}-{month:02d}-{monthrange(today.year, month)[1]}",
+            date__gte=f"{today.year}-{month:02d}-01",
             transaction_type=Type.EXPENSES).aggregate(Sum("amount"))
+        amount_dec = amount.get("amount__sum")
         ws_data.get("spending").update({
-            str(month): amount.get("amount__sum") if amount is not None else 0
+            str(month): float(amount_dec) if amount_dec is not None else 0.0
         })
 
     pprint(ws_data)
