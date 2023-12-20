@@ -36,6 +36,7 @@ DATABASES = database.DATABASE if database.DEMO is False else database.DATABASE_D
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'drf_yasg',
     'django_filters',
+    'channels',
     # APP
     'dashboard.apps.DashboardConfig'
 ]
@@ -131,3 +133,5 @@ REST_FRAMEWORK = {
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+ASGI_APPLICATION = 'budgetter.asgi.application'

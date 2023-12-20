@@ -16,6 +16,11 @@ class Type(models.TextChoices):
     INTERNAL = 'INTERNAL'
 
 
+class Status(models.TextChoices):
+    ACTIVE = 'ACTIVE'
+    CLOSED = 'CLOSED'
+
+
 class ExpensesManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(transaction_type='EXPENSES')
@@ -42,6 +47,7 @@ class Account(models.Model):
     amount = models.FloatField(_("Amount"), default=0)
     color = models.CharField(_("Color"), max_length=1000, default='#ffffff')
     last_update = models.DateField(_("Date"), default=datetime.date.today)
+    status = models.CharField(_("State"), choices=Status.choices, default=Status.ACTIVE)
 
 
 class Category(models.Model):
@@ -54,7 +60,7 @@ class Transaction(models.Model):
     date = models.DateField()
     account = models.ForeignKey("Account", on_delete=models.CASCADE)
     category = models.ForeignKey("Category", on_delete=models.CASCADE, null=True, blank=True)
-    comment = models.CharField(max_length=4000, default='', null=True, blank=True)
+    comment = models.CharField(max_length=4000, default='', blank=True)
     mean = models.CharField(max_length=1000, choices=Mean.choices, default=Mean.CARD)
     transaction_type = models.CharField(max_length=1000, choices=Type.choices, default=Type.EXPENSES)
 
