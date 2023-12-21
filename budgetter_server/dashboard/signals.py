@@ -2,10 +2,12 @@ import datetime
 from calendar import monthrange
 from pprint import pprint
 
+from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django.db.models import Sum
 from django.dispatch import Signal
 
+from dashboard.consumers import DashboardConsumer
 from dashboard.models import Transaction, Type, Account, Status
 
 channel_layer = get_channel_layer()
@@ -44,7 +46,7 @@ def transaction_post_save(**kwargs):
     )
     for account in accounts:
         # Check tendency against last month
-        account
+        # account
 
         ws_data.get("accounts").update({
             account.name: {
@@ -52,6 +54,16 @@ def transaction_post_save(**kwargs):
             }
         })
 
-
     pprint(ws_data)
+
+    # Send data on web socket
+    async_to_sync(channel_layer.group_send)(
+        "dashboard",
+        {
+            "type": "chat.message",
+            "data": ws_data
+        }
+    )
+
+    print('ok')
 

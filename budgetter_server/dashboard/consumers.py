@@ -9,6 +9,9 @@ class DashboardConsumer(WebsocketConsumer):
     Dashboard consumer for all data
     """
 
+    room_name = ''
+    room_group_name = ''
+
     def connect(self):
         """
         Accept connection to ws
@@ -16,8 +19,8 @@ class DashboardConsumer(WebsocketConsumer):
         :return: None
         """
 
-        self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
-        self.room_group_name = f"dashboard_{self.room_name}"
+        self.room_name = f"dashboard"
+        self.room_group_name = f"debug_dashboard"
 
         # Join room group
         async_to_sync(self.channel_layer.group_add)(
@@ -25,3 +28,18 @@ class DashboardConsumer(WebsocketConsumer):
         )
 
         self.accept()
+
+    def receive(self, text_data=None, bytes_data=None):
+        """
+        Override receive
+        """
+
+        data_json = json.loads(text_data)
+
+        async_to_sync(self.channel_layer.group_send)(
+            "dashboard",
+            {
+                "type": "chat.message",
+                "data": data_json
+            }
+        )

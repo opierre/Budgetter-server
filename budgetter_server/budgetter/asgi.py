@@ -10,9 +10,9 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'budgetter.settings')
 
 application = ProtocolTypeRouter({
     "http": get_asgi_application(),
-    "websocket": AuthMiddlewareStack(
+    "websocket":
         URLRouter(
             websocket_urlpatterns
         )
-    ),
+    ,
 })

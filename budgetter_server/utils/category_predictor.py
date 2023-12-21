@@ -19,9 +19,9 @@ def parse_file(path_to_file: str, sep: str = ";") -> List:
 
     lines = []
     date_regexp = [
-        "^\d{4}/\d{2}/\d{2}" + f"{sep}",
-        "^\d{2}/\d{2}/\d{2}" + f"{sep}",
-        "^\d{2}/\d{2}/\d{4}" + f"{sep}",
+        r"^\d{4}/\d{2}/\d{2}" + f"{sep}",
+        r"^\d{2}/\d{2}/\d{2}" + f"{sep}",
+        r"^\d{2}/\d{2}/\d{4}" + f"{sep}",
     ]
     with open(path_to_file) as fd:
         line = fd.readline()
