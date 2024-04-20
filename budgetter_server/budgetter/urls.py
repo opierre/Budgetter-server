@@ -50,3 +50,4 @@ websocket_urlpatterns = [
 ]
 
 urlpatterns.extend(budget_urls)
+urlpatterns.extend(websocket_urlpatterns)

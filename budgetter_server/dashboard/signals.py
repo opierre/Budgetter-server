@@ -7,7 +7,6 @@ from channels.layers import get_channel_layer
 from django.db.models import Sum
 from django.dispatch import Signal
 
-from dashboard.consumers import DashboardConsumer
 from dashboard.models import Transaction, Type, Account, Status
 
 channel_layer = get_channel_layer()
@@ -30,7 +29,9 @@ def transaction_post_save(**kwargs):
     }
 
     # Build spending data
-    for month in range(today.month-5, today.month+1):
+    start_month = (today.month - 5) % 12
+    end_month = (today.month + 1) % 12
+    for month in range(start_month, end_month):
         amount = Transaction.objects.filter(
             date__lte=f"{today.year}-{month:02d}-{monthrange(today.year, month)[1]}",
             date__gte=f"{today.year}-{month:02d}-01",
@@ -58,12 +59,9 @@ def transaction_post_save(**kwargs):
 
     # Send data on web socket
     async_to_sync(channel_layer.group_send)(
-        "dashboard",
+        "debug_dashboard",
         {
             "type": "chat.message",
             "data": ws_data
         }
     )
-
-    print('ok')
-
