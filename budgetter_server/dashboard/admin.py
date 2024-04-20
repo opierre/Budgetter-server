@@ -14,7 +14,7 @@ class AccountAdmin(admin.ModelAdmin):
 
 class TransactionAdmin(admin.ModelAdmin):
     list_display = ('name', 'amount', 'date', 'account', 'mean')
-    list_filter = ('amount', 'date', 'account')
+    list_filter = ('date', 'account')
 
 
 admin.site.register(Bank, BankAdmin)
