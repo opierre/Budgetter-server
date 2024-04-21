@@ -4,7 +4,7 @@ from pprint import pprint
 
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
-from django.db.models import Sum
+from django.db.models import Sum, Count
 from django.dispatch import Signal
 
 from dashboard.models import Transaction, Type, Account, Status
@@ -25,30 +25,56 @@ def transaction_post_save(**kwargs):
     today = datetime.date.today()
     ws_data = {
         "accounts": {},
-        "spending": {}
+        "spending": {},
+        "distribution": {}
     }
 
     # Build spending data
-    start_month = (today.month - 5) % 12
-    end_month = (today.month + 1) % 12
-    for month in range(start_month, end_month):
-        amount = Transaction.objects.filter(
-            date__lte=f"{today.year}-{month:02d}-{monthrange(today.year, month)[1]}",
-            date__gte=f"{today.year}-{month:02d}-01",
-            transaction_type=Type.EXPENSES).aggregate(Sum("amount"))
+    start_month = (today.month - 6) % 13
+    end_month = (today.month + 1) % 13
+    current_year = today.year - 1 if start_month >= end_month else today.year
+    current_month = start_month
+    for _ in range(1, 7):
+        # Handle start/end month reset for year
+        if current_month % 13 == 0:
+            current_month = 1
+            current_year = today.year
+        current_month_name = datetime.date(1900, current_month, 1).strftime('%B')
+
+        # Retrieve all transactions according to date
+        transactions = Transaction.objects.filter(
+            date__lte=f"{current_year}-{current_month:02d}-{monthrange(current_year, current_month)[1]}",
+            date__gte=f"{current_year}-{current_month:02d}-01",
+            transaction_type=Type.EXPENSES)
+        amount = transactions.aggregate(Sum("amount"))
         amount_dec = amount.get("amount__sum")
+
+        # TODO: Retrieve top five recurrent categories within this date range
+        # top_categories = (
+        #     transactions.values('category__name')
+        #     .annotate(transaction_count=Count('category'))
+        #     .order_by('-transaction_count')
+        # )
+
+        # Build spending
         ws_data.get("spending").update({
-            str(month): float(amount_dec) if amount_dec is not None else 0.0
+            current_month_name: float(amount_dec) if amount_dec is not None else 0.0
         })
+
+        # Build expenses distribution
+        ws_data.get("spending").update({
+            current_month_name: float(amount_dec) if amount_dec is not None else 0.0
+        })
+
+        current_month += 1
 
     # Build balance data
     accounts = Account.objects.filter(
-            status=Status.ACTIVE
+        status=Status.ACTIVE
     )
     for account in accounts:
         # Check tendency against last month
         # account
-
         ws_data.get("accounts").update({
             account.name: {
                 "balance": account.amount
