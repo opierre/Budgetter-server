@@ -21,16 +21,6 @@ class Status(models.TextChoices):
     CLOSED = 'CLOSED'
 
 
-class ExpensesManager(models.Manager):
-    def get_queryset(self):
-        return super().get_queryset().filter(transaction_type='EXPENSES')
-
-
-class IncomeManager(models.Manager):
-    def get_queryset(self):
-        return super().get_queryset().filter(transactionType='INCOME')
-
-
 class Bank(models.Model):
     name = models.CharField(max_length=1000, default='')
     swift = models.CharField(max_length=1000, default='')
@@ -64,7 +54,14 @@ class Transaction(models.Model):
     mean = models.CharField(max_length=1000, choices=Mean.choices, default=Mean.CARD)
     transaction_type = models.CharField(max_length=1000, choices=Type.choices, default=Type.EXPENSES)
 
-    # Define managers
-    objects = models.Manager()
-    expenses = ExpensesManager()
-    income = IncomeManager()
+
+class MonthlyCombinedBalance(models.Model):
+    year = models.IntegerField()
+    month = models.IntegerField()
+    balance = models.DecimalField(max_digits=20, decimal_places=2)
+
+    class Meta:
+        unique_together = ('year', 'month')
+
+    def __str__(self):
+        return f"{self.year}-{self.month}: {self.balance}"

@@ -8,6 +8,7 @@ from django.db.models import Sum, Count
 from django.dispatch import Signal
 
 from dashboard.models import Transaction, Type, Account, Status
+from dashboard.utils import update_monthly_combined_balances
 
 channel_layer = get_channel_layer()
 
@@ -26,10 +27,13 @@ def transaction_post_save(**kwargs):
     ws_data = {
         "accounts": {},
         "spending": {},
-        "distribution": {}
+        "distribution": {},
+        "savings": {}
     }
 
+    # ---------------
     # Build spending data
+    # ---------------
     start_month = (today.month - 6) % 13
     end_month = (today.month + 1) % 13
     current_year = today.year - 1 if start_month >= end_month else today.year
@@ -62,13 +66,21 @@ def transaction_post_save(**kwargs):
         })
 
         # Build expenses distribution
-        ws_data.get("spending").update({
-            current_month_name: float(amount_dec) if amount_dec is not None else 0.0
-        })
+        # ws_data.get("spending").update({
+        #     current_month_name: float(amount_dec) if amount_dec is not None else 0.0
+        # })
 
         current_month += 1
 
+    # ---------------
+    # Build last 12 months savings
+    # ---------------
+    months_savings = update_monthly_combined_balances()
+    ws_data.get("savings").update(months_savings)
+
+    # ---------------
     # Build balance data
+    # ---------------
     accounts = Account.objects.filter(
         status=Status.ACTIVE
     )

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Bank, Account, Transaction, Category
+from .models import Bank, Account, Transaction, Category, MonthlyCombinedBalance
 
 
 class BankAdmin(admin.ModelAdmin):
@@ -17,7 +17,13 @@ class TransactionAdmin(admin.ModelAdmin):
     list_filter = ('date', 'account')
 
 
+class MonthlyCombinedBalanceAdmin(admin.ModelAdmin):
+    list_display = ('year', 'month', 'balance')
+    list_filter = ('year', 'month')
+
+
 admin.site.register(Bank, BankAdmin)
 admin.site.register(Account, AccountAdmin)
 admin.site.register(Transaction, TransactionAdmin)
+admin.site.register(MonthlyCombinedBalance, MonthlyCombinedBalanceAdmin)
 admin.site.register(Category)
