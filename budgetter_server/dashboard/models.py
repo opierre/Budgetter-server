@@ -32,7 +32,7 @@ class Bank(models.Model):
 
 class Account(models.Model):
     name = models.CharField(_("Name"), max_length=1000, default='')
-    account_id = models.CharField(_("AccountID"), max_length=1000, default='')
+    account_id = models.CharField(_("AccountID"), max_length=1000, default='', unique=True)
     bank = models.ForeignKey("Bank", on_delete=models.CASCADE)
     amount = models.FloatField(_("Amount"), default=0)
     color = models.CharField(_("Color"), max_length=1000, default='#ffffff')
@@ -53,6 +53,7 @@ class Transaction(models.Model):
     comment = models.CharField(max_length=4000, default='', blank=True)
     mean = models.CharField(max_length=1000, choices=Mean.choices, default=Mean.CARD)
     transaction_type = models.CharField(max_length=1000, choices=Type.choices, default=Type.EXPENSES)
+    reference = models.CharField(max_length=1000, default='', unique=True)
 
 
 class MonthlyCombinedBalance(models.Model):
