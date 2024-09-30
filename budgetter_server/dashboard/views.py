@@ -1,9 +1,12 @@
+from django.core.files.uploadedfile import UploadedFile
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from utils.category_predictor import CategoryPredictor, parse_file
+from utils.ofxtools import convert_ofx_to_json
 from .models import Bank, Account, Category, Transaction
 from .serializers import BankSerializer, AccountSerializer, CategorySerializer, TransactionSerializer
 from .signals import transactions_created
@@ -59,3 +62,18 @@ class TransactionViewSet(ModelViewSet):
     #     predictor = CategoryPredictor(training_dataset, [transaction])
 
 
+@api_view(['POST'])
+def upload_ofx_file(request):
+    """
+    Upload an OFX file to be parsed
+
+    :param request: request sent
+    :return: HttpResponse
+    """
+    if 'file' not in request.FILES:
+        return Response({'error': 'No file provided'}, status=400)
+
+    file: UploadedFile = request.FILES['file']
+    convert_ofx_to_json(file)
+
+    return HttpResponse("File processed successfully!")
