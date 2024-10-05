@@ -37,7 +37,9 @@ def update_monthly_combined_balances() -> dict:
         current_month_combined = MonthlyCombinedBalance.objects.update_or_create(
             year=year,
             month=current_month,
-            balance=total_amount_income-total_amount_expenses
+            defaults={
+                "balance": float(total_amount_income) - float(total_amount_expenses)
+            }
         )
 
         # Update result

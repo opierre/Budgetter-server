@@ -1,24 +1,27 @@
 import io
-import os.path
 import re
 from datetime import datetime
-from typing import Tuple
 
 import pytz
 from django.core.files.uploadedfile import UploadedFile
+from django.db import close_old_connections, connection
 from ofxtools import OFXTree
 from ofxtools.models import CCSTMTRS, STMTRS
 
 from dashboard.models import Mean, TransactionType, Account, Bank, Transaction
+from dashboard.signals import transactions_created
 
 
-def convert_ofx_to_json(ofx_file: UploadedFile) -> Tuple[dict, dict, str]:
+def convert_ofx_to_json(ofx_file: UploadedFile) -> None:
     """
     Convert OFX file to models
 
     :param ofx_file: OFX file
-    :return: converted data as JSON, header with global info, error message
+    :return: None
     """
+
+    # Close previous connections to make it threadsafe
+    close_old_connections()
 
     content = io.BytesIO(ofx_file.read())
 
@@ -95,7 +98,7 @@ def convert_ofx_to_json(ofx_file: UploadedFile) -> Tuple[dict, dict, str]:
                     "reference": transaction.fitid,
                 }
             )
-            Transaction.objects.get_or_create(
+            transaction_inst, _ = Transaction.objects.get_or_create(
                 name=transaction.name,
                 amount=abs(float(transaction.trnamt)),
                 date=transaction.dtposted.strftime("%Y-%m-%d"),
@@ -105,6 +108,10 @@ def convert_ofx_to_json(ofx_file: UploadedFile) -> Tuple[dict, dict, str]:
                 transaction_type=transaction_type,
                 reference=transaction.fitid,
             )
+            transactions_created.send(transaction_inst.__class__)
+
+    # Clean up database connections
+    connection.close()
 
     # Order transactions by date
     data.update(
@@ -118,5 +125,3 @@ def convert_ofx_to_json(ofx_file: UploadedFile) -> Tuple[dict, dict, str]:
             )
         }
     )
-
-    return header, data, ""

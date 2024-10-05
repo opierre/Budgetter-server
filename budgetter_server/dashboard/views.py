@@ -1,7 +1,9 @@
+from concurrent.futures import ThreadPoolExecutor
+
 from django.core.files.uploadedfile import UploadedFile
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
-from rest_framework.decorators import api_view, action
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ViewSet
 
@@ -76,9 +78,11 @@ class OFXUploadViewSet(ViewSet):
         :return: HttpResponse
         """
         if 'file' not in request.FILES:
-            return Response({'error': 'No file provided'}, status=400)
+            return Response({'error': 'No file provided'}, status=status.HTTP_400_BAD_REQUEST)
 
         file: UploadedFile = request.FILES['file']
-        convert_ofx_to_json(file)
+
+        with ThreadPoolExecutor() as executor:
+            executor.submit(convert_ofx_to_json, file)
 
         return Response(status=status.HTTP_200_OK)
