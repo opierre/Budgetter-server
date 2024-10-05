@@ -1,6 +1,6 @@
 from django.db.models import Sum
 from datetime import datetime, timedelta, date
-from .models import Transaction, MonthlyCombinedBalance, Type
+from .models import Transaction, MonthlyCombinedBalance, TransactionType
 
 
 def update_monthly_combined_balances() -> dict:
@@ -28,9 +28,9 @@ def update_monthly_combined_balances() -> dict:
         transactions = Transaction.objects.filter(date__gte=start_date, date__lte=end_date)
 
         # Calculate the total amount of all transactions
-        total_amount_income = transactions.filter(transaction_type=Type.INCOME).aggregate(Sum('amount'))[
+        total_amount_income = transactions.filter(transaction_type=TransactionType.INCOME).aggregate(Sum('amount'))[
                                   'amount__sum'] or 0.0
-        total_amount_expenses = transactions.filter(transaction_type=Type.EXPENSES).aggregate(Sum('amount'))[
+        total_amount_expenses = transactions.filter(transaction_type=TransactionType.EXPENSES).aggregate(Sum('amount'))[
                                     'amount__sum'] or 0.0
 
         # Store the combined balance in the database

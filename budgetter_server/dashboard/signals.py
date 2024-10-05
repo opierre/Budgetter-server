@@ -4,10 +4,10 @@ from pprint import pprint
 
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
-from django.db.models import Sum, Count
+from django.db.models import Sum
 from django.dispatch import Signal
 
-from dashboard.models import Transaction, Type, Account, Status
+from dashboard.models import Transaction, TransactionType, Account, Status
 from dashboard.utils import update_monthly_combined_balances
 
 channel_layer = get_channel_layer()
@@ -49,7 +49,7 @@ def transaction_post_save(**kwargs):
         transactions = Transaction.objects.filter(
             date__lte=f"{current_year}-{current_month:02d}-{monthrange(current_year, current_month)[1]}",
             date__gte=f"{current_year}-{current_month:02d}-01",
-            transaction_type=Type.EXPENSES)
+            transaction_type=TransactionType.EXPENSES)
         amount = transactions.aggregate(Sum("amount"))
         amount_dec = amount.get("amount__sum")
 

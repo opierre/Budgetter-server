@@ -1,9 +1,9 @@
 from django.core.files.uploadedfile import UploadedFile
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, ViewSet
 
 from utils.category_predictor import CategoryPredictor, parse_file
 from utils.ofxtools import convert_ofx_to_json
@@ -62,18 +62,23 @@ class TransactionViewSet(ModelViewSet):
     #     predictor = CategoryPredictor(training_dataset, [transaction])
 
 
-@api_view(['POST'])
-def upload_ofx_file(request):
+class OFXUploadViewSet(ViewSet):
     """
-    Upload an OFX file to be parsed
-
-    :param request: request sent
-    :return: HttpResponse
+    A ViewSet for uploading and processing OFX files.
     """
-    if 'file' not in request.FILES:
-        return Response({'error': 'No file provided'}, status=400)
 
-    file: UploadedFile = request.FILES['file']
-    convert_ofx_to_json(file)
+    @action(detail=False, methods=['post'], url_path='upload-ofx')
+    def upload_ofx_file(self, request):
+        """
+        Upload an OFX file to be parsed
 
-    return HttpResponse("File processed successfully!")
+        :param request: request sent
+        :return: HttpResponse
+        """
+        if 'file' not in request.FILES:
+            return Response({'error': 'No file provided'}, status=400)
+
+        file: UploadedFile = request.FILES['file']
+        convert_ofx_to_json(file)
+
+        return Response(status=status.HTTP_200_OK)

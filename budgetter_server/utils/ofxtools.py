@@ -9,7 +9,7 @@ from django.core.files.uploadedfile import UploadedFile
 from ofxtools import OFXTree
 from ofxtools.models import CCSTMTRS, STMTRS
 
-from dashboard.models import Mean, Type, Account, Bank
+from dashboard.models import Mean, TransactionType, Account, Bank, Transaction
 
 
 def convert_ofx_to_json(ofx_file: UploadedFile) -> Tuple[dict, dict, str]:
@@ -51,13 +51,11 @@ def convert_ofx_to_json(ofx_file: UploadedFile) -> Tuple[dict, dict, str]:
             "last_update": statement.balance.dtasof.strftime("%Y-%m-%d"),
             "bank_id": bank_id,
         }
-        Account.objects.get_or_create(
-            name=,
+        account_inst, _ = Account.objects.get_or_create(
             account_id=statement.account.acctid,
-            bank =Bank.objects.filter(bic=bank_id),
-            amount =float(statement.balance.balamt),
-            last_update=,
-            status =,
+            bank=Bank.objects.filter(bic__contains=bank_id).first(),
+            amount=float(statement.balance.balamt),
+            last_update=statement.balance.dtasof.strftime("%Y-%m-%d"),
         )
 
         # Update header
@@ -74,16 +72,16 @@ def convert_ofx_to_json(ofx_file: UploadedFile) -> Tuple[dict, dict, str]:
         for transaction in statement.transactions:
             # TODO: fix generic term for internal transaction
             if "VIREMENT EN VOTRE FAVEUR DE OLIVIER PIERRE" in transaction.memo:
-                transaction_type = Type.INTERNAL.value
+                transaction_type = TransactionType.INTERNAL.value
                 transaction_mean = Mean.TRANSFER.value
             elif re.match(exclude_pattern_cb, transaction.memo):
                 print(transaction.memo)
                 continue
             elif float(transaction.trnamt) < 0:
-                transaction_type = Type.EXPENSES.value
+                transaction_type = TransactionType.EXPENSES.value
                 transaction_mean = Mean.CARD.value
             else:
-                transaction_type = Type.INCOME.value
+                transaction_type = TransactionType.INCOME.value
                 transaction_mean = Mean.CARD.value
             data.get("transactions").append(
                 {
@@ -96,6 +94,16 @@ def convert_ofx_to_json(ofx_file: UploadedFile) -> Tuple[dict, dict, str]:
                     "account": account,
                     "reference": transaction.fitid,
                 }
+            )
+            Transaction.objects.get_or_create(
+                name=transaction.name,
+                amount=abs(float(transaction.trnamt)),
+                date=transaction.dtposted.strftime("%Y-%m-%d"),
+                account=account_inst,
+                comment=transaction.memo,
+                mean=transaction_mean,
+                transaction_type=transaction_type,
+                reference=transaction.fitid,
             )
 
     # Order transactions by date

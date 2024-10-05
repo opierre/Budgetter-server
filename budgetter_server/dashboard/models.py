@@ -10,10 +10,14 @@ class Mean(models.TextChoices):
     TRANSFER = 'TRANSFER'
 
 
-class Type(models.TextChoices):
+class TransactionType(models.TextChoices):
     EXPENSES = 'EXPENSES'
     INCOME = 'INCOME'
     INTERNAL = 'INTERNAL'
+
+
+class AccountType(models.TextChoices):
+    CREDIT_CARD = "CREDIT CARD"
 
 
 class Status(models.TextChoices):
@@ -33,6 +37,7 @@ class Bank(models.Model):
 class Account(models.Model):
     name = models.CharField(_("Name"), max_length=1000, default='')
     account_id = models.CharField(_("AccountID"), max_length=1000, default='', unique=True)
+    account_type = models.CharField(_("AccountID"), choices=AccountType.choices, default=AccountType.CREDIT_CARD)
     bank = models.ForeignKey("Bank", on_delete=models.CASCADE)
     amount = models.FloatField(_("Amount"), default=0)
     color = models.CharField(_("Color"), max_length=1000, default='#ffffff')
@@ -52,7 +57,7 @@ class Transaction(models.Model):
     category = models.ForeignKey("Category", on_delete=models.CASCADE, null=True, blank=True)
     comment = models.CharField(max_length=4000, default='', blank=True)
     mean = models.CharField(max_length=1000, choices=Mean.choices, default=Mean.CARD)
-    transaction_type = models.CharField(max_length=1000, choices=Type.choices, default=Type.EXPENSES)
+    transaction_type = models.CharField(max_length=1000, choices=TransactionType.choices, default=TransactionType.EXPENSES)
     reference = models.CharField(max_length=1000, default='', unique=True)
 
 
