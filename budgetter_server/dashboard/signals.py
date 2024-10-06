@@ -88,7 +88,7 @@ def transaction_post_save(**kwargs):
         # Check tendency against last month
         # account
         ws_data.get("accounts").update({
-            account.name: {
+            account.account_id: {
                 "balance": account.amount
             }
         })
