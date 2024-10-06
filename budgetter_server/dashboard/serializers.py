@@ -1,6 +1,7 @@
 import os.path
 from typing import Union
 
+from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 from rest_framework.serializers import ModelSerializer
 
@@ -46,6 +47,7 @@ class CategorySerializer(ModelSerializer):
 
 
 class TransactionSerializer(ModelSerializer):
+    date = serializers.DateField(format="%Y-%m-%d", required=False)  # ISO 8601 format
 
     class Meta:
         model = Transaction

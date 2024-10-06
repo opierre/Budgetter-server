@@ -108,7 +108,7 @@ def convert_ofx_to_json(ofx_file: UploadedFile) -> None:
                 transaction_type=transaction_type,
                 reference=transaction.fitid,
             )
-            transactions_created.send(transaction_inst.__class__)
+            transactions_created.send(transaction_inst)
 
     # Clean up database connections
     connection.close()
