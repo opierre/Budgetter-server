@@ -35,9 +35,9 @@ class Bank(models.Model):
 
 
 class Account(models.Model):
-    name = models.CharField(_("Name"), max_length=1000, default='')
+    name = models.CharField(_("Name"), max_length=1000, default='', null=True, blank=True)
     account_id = models.CharField(_("AccountID"), max_length=1000, default='', unique=True)
-    account_type = models.CharField(_("AccountID"), choices=AccountType.choices, default=AccountType.CREDIT_CARD)
+    account_type = models.CharField(_("AccountType"), choices=AccountType.choices, default=AccountType.CREDIT_CARD)
     bank = models.ForeignKey("Bank", on_delete=models.CASCADE)
     amount = models.FloatField(_("Amount"), default=0)
     color = models.CharField(_("Color"), max_length=1000, default='#ffffff')

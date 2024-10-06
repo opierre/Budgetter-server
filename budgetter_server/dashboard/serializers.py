@@ -35,6 +35,8 @@ class BankSerializer(ModelSerializer):
 
 
 class AccountSerializer(ModelSerializer):
+    bank = serializers.StringRelatedField()
+
     class Meta:
         model = Account
         fields = '__all__'

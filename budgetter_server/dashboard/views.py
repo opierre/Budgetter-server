@@ -84,5 +84,6 @@ class OFXUploadViewSet(ViewSet):
 
         executor = ThreadPoolExecutor()
         executor.submit(convert_ofx_to_json, file)
+        # convert_ofx_to_json(file)
 
         return Response(status=status.HTTP_200_OK)

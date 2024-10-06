@@ -7,8 +7,8 @@ from channels.layers import get_channel_layer
 from django.db.models import Sum
 from django.dispatch import Signal
 
-from dashboard.models import Transaction, TransactionType, Account, Status
-from dashboard.serializers import TransactionSerializer
+from dashboard.models import Transaction, TransactionType, Account
+from dashboard.serializers import TransactionSerializer, AccountSerializer
 from dashboard.utils import update_monthly_combined_balances
 
 channel_layer = get_channel_layer()
@@ -26,7 +26,7 @@ def transaction_post_save(**kwargs):
 
     today = datetime.date.today()
     ws_data = {
-        "accounts": {},
+        "accounts": AccountSerializer(Account.objects.all(), many=True).data,
         "spending": {},
         "distribution": {},
         "savings": {},
@@ -79,28 +79,6 @@ def transaction_post_save(**kwargs):
     # ---------------
     months_savings = update_monthly_combined_balances()
     ws_data.get("savings").update(months_savings)
-
-    # ---------------
-    # Build balance data
-    # ---------------
-    accounts = Account.objects.filter(
-        status=Status.ACTIVE
-    )
-    for account in accounts:
-        # Check tendency against last month
-        # account
-        account_ws = ws_data.get("accounts").get(account.account_id, {})
-        if account_ws == {}:
-            ws_data.get("accounts").update({
-                account.account_id: {
-                    "balance": account.amount
-                }
-            })
-        else:
-            account_ws.update({
-                "balance": account.amount
-            }
-            )
 
     pprint(ws_data)
 
