@@ -8,10 +8,9 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ViewSet
 
 from utils.category_predictor import CategoryPredictor, parse_file
-from utils.ofxtools import convert_ofx_to_json
+from utils.ofxtools import import_ofx_to_database
 from .models import Bank, Account, Category, Transaction
 from .serializers import BankSerializer, AccountSerializer, CategorySerializer, TransactionSerializer
-from .signals import transactions_created
 
 
 class BankViewSet(ModelViewSet):
@@ -54,7 +53,6 @@ class TransactionViewSet(ModelViewSet):
         serializer = self.get_serializer(data=request.data, many=isinstance(request.data, list))
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        transactions_created.send(self.__class__)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
@@ -83,7 +81,6 @@ class OFXUploadViewSet(ViewSet):
         file: UploadedFile = request.FILES['file']
 
         executor = ThreadPoolExecutor()
-        executor.submit(convert_ofx_to_json, file)
-        # convert_ofx_to_json(file)
+        executor.submit(import_ofx_to_database, file)
 
         return Response(status=status.HTTP_200_OK)

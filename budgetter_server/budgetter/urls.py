@@ -19,6 +19,7 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
+from budgetter.consumers import BudgetterConsumer
 from dashboard.consumers import DashboardConsumer
 
 schema_view = get_schema_view(
@@ -46,7 +47,8 @@ urlpatterns = [
 
 
 websocket_urlpatterns = [
-    path("ws/dashboard/", DashboardConsumer.as_asgi())
+    path("ws/dashboard/", DashboardConsumer.as_asgi()),
+    path("ws/budgetter/", BudgetterConsumer.as_asgi())
 ]
 
 urlpatterns.extend(budget_urls)

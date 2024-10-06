@@ -5,7 +5,8 @@ from pprint import pprint
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django.db.models import Sum
-from django.dispatch import Signal
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 from dashboard.models import Transaction, TransactionType, Account
 from dashboard.serializers import TransactionSerializer, AccountSerializer
@@ -13,10 +14,9 @@ from dashboard.utils import update_monthly_combined_balances
 
 channel_layer = get_channel_layer()
 
-transactions_created = Signal()
 
-
-def transaction_post_save(**kwargs):
+@receiver(post_save, sender=Transaction)
+def transaction_created(**kwargs):
     """
     Callback after transactions creation
 
@@ -30,7 +30,7 @@ def transaction_post_save(**kwargs):
         "spending": {},
         "distribution": {},
         "savings": {},
-        "last_transaction_added": TransactionSerializer(kwargs.get('sender', {})).data
+        "last_transaction_added": TransactionSerializer(kwargs.get('instance', {})).data
     }
 
     # ---------------
