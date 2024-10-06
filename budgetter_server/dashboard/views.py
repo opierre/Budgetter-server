@@ -82,7 +82,7 @@ class OFXUploadViewSet(ViewSet):
 
         file: UploadedFile = request.FILES['file']
 
-        with ThreadPoolExecutor() as executor:
-            executor.submit(convert_ofx_to_json, file)
+        executor = ThreadPoolExecutor()
+        executor.submit(convert_ofx_to_json, file)
 
         return Response(status=status.HTTP_200_OK)
