@@ -50,6 +50,7 @@ class CategorySerializer(ModelSerializer):
 
 class TransactionSerializer(ModelSerializer):
     date = serializers.DateField(format="%Y-%m-%d", required=False)  # ISO 8601 format
+    account = serializers.StringRelatedField()
 
     class Meta:
         model = Transaction
