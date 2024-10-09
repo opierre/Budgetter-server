@@ -40,7 +40,7 @@ class Account(models.Model):
     account_type = models.CharField(_("AccountType"), choices=AccountType.choices, default=AccountType.CREDIT_CARD)
     bank = models.ForeignKey("Bank", on_delete=models.CASCADE)
     amount = models.FloatField(_("Amount"), default=0)
-    color = models.CharField(_("Color"), max_length=1000, default='#ffffff')
+    color = models.CharField(_("Color"), max_length=1000, default='')
     last_update = models.DateField(_("Date"), default=datetime.date.today)
     status = models.CharField(_("State"), choices=Status.choices, default=Status.ACTIVE)
 
