@@ -44,6 +44,9 @@ class Account(models.Model):
     last_update = models.DateField(_("Date"), default=datetime.date.today)
     status = models.CharField(_("State"), choices=Status.choices, default=Status.ACTIVE)
 
+    def __str__(self):
+        return f"{self.account_id}"
+
 
 class Category(models.Model):
     name = models.CharField(max_length=1000, default='')
