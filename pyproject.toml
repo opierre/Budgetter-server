@@ -4,10 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "budgetter_server"
-version = "2024.1.0"
-authors = [
-    { name = "Pierre OLIVIER", email = "pierreolivier.pro@gmail.com" },
-]
+version = "2025.1.0"
+authors = [{ name = "Pierre OLIVIER", email = "pierreolivier.pro@gmail.com" }]
 description = "Finance manager desktop application"
 readme = "README.md"
 requires-python = ">=3.9"
@@ -15,18 +13,16 @@ keywords = ["finance", "budget", "management"]
 license = { text = "GPL-3.0" }
 classifiers = []
 dependencies = [
-    "Django",
-    "djangorestframework",
-    "django-filter",
-    "django-extensions",
-    "drf_yasg",
-    "scikit-learn",
-    "channels",
-    "daphne",
-    "asgiref",
-    "psycopg2",
-    "pytz",
-    "ofxtools",
+  "Django>=5.2.8",
+  "djangorestframework>=3.16.1",
+  "django-filter>=25.2",
+  "django-extensions",
+  "drf_yasg>=1.21.11",
+  "psycopg[binary]>=3.2.13",
+  "pytz>=2025.2",
+  "ofxtools>=0.9.5",
+  "transformers>=4.30.0",
+  "torch>=2.0.0",
 ]
 
 [project.urls]
