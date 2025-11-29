@@ -132,7 +132,11 @@ REST_FRAMEWORK = {
     "DATE_INPUT_FORMATS": ["%Y-%m-%d"],
 }
 
-DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# AI Categorization Settings
+USE_AI_CATEGORIZATION = True  # Set to False to use sklearn instead
+AI_CONFIDENCE_THRESHOLD = 0.25  # Minimum confidence (0.0-1.0) to accept prediction
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
