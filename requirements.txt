@@ -7,6 +7,6 @@ scikit-learn
 channels
 daphne
 asgiref
-psycopg2
+psycopg[binary]
 pytz
 ofxtools
