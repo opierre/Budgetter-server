@@ -92,7 +92,7 @@ class AICategorizer:
 
 def preload_model():
     """
-    Preload the AI model into HuggingFace cache and memory.
+    Preload the AI model into cache and memory.
     This ensures the model is downloaded and ready for use.
     """
     global _GLOBAL_CLASSIFIER
