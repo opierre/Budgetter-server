@@ -51,6 +51,45 @@ class Account(models.Model):
 class Category(models.Model):
     name = models.CharField(max_length=1000, default='')
 
+    def __str__(self):
+        return self.name
+
+
+class CategorizationRule(models.Model):
+    keywords = models.CharField(max_length=1000, help_text="Comma-separated keywords or regex")
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    transaction_type = models.CharField(
+        max_length=1000, 
+        choices=TransactionType.choices, 
+        null=True, 
+        blank=True,
+        help_text="Optional filter by transaction type"
+    )
+
+    def matches(self, name: str, memo: str) -> bool:
+        """
+        Check if rule matches transaction name or memo
+        """
+        import re
+        name = (name or '').lower()
+        memo = (memo or '').lower()
+        keywords = [kw.strip().lower() for kw in self.keywords.split(',')]
+        
+        for keyword in keywords:
+            # Try exact match
+            if keyword in name or keyword in memo:
+                return True
+            # Try regex
+            try:
+                if re.search(keyword, name) or re.search(keyword, memo):
+                    return True
+            except re.error:
+                continue
+        return False
+
+    def __str__(self):
+        return f"Rule for {self.category.name}: {self.keywords}"
+
 
 class Transaction(models.Model):
     name = models.CharField(max_length=1000, default='')
@@ -63,14 +102,3 @@ class Transaction(models.Model):
     transaction_type = models.CharField(max_length=1000, choices=TransactionType.choices, default=TransactionType.EXPENSES)
     reference = models.CharField(max_length=1000, default='', unique=True)
 
-
-class MonthlyCombinedBalance(models.Model):
-    year = models.IntegerField()
-    month = models.IntegerField()
-    balance = models.DecimalField(max_digits=20, decimal_places=2)
-
-    class Meta:
-        unique_together = ('year', 'month')
-
-    def __str__(self):
-        return f"{self.year}-{self.month}: {self.balance}"
