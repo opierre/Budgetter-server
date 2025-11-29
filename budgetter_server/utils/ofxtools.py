@@ -10,7 +10,6 @@ from ofxtools import OFXTree
 from ofxtools.models import CCSTMTRS, STMTRS
 
 from dashboard.models import Mean, TransactionType, Account, Bank, Transaction
-from dashboard.signals import channel_layer
 
 
 def import_ofx_to_database(ofx_file: UploadedFile) -> None:
