@@ -25,7 +25,7 @@ SECRET_KEY = database.SECRET_KEY
 ALLOWED_HOSTS = database.ALLOWED_HOSTS
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = database.DEBUG
+DEBUG = True
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
@@ -39,7 +39,6 @@ DATABASES = database.DATABASE
 # Application definition
 
 INSTALLED_APPS = [
-    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -50,7 +49,6 @@ INSTALLED_APPS = [
     'django_extensions',
     'drf_yasg',
     'django_filters',
-    'channels',
     # APP
     'dashboard.apps.DashboardConfig'
 ]

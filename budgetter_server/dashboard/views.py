@@ -1,14 +1,8 @@
-from concurrent.futures import ThreadPoolExecutor
-
-from django.core.files.uploadedfile import UploadedFile
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
-from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet, ViewSet
+from rest_framework.viewsets import ModelViewSet
 
-from utils.category_predictor import CategoryPredictor, parse_file
-from utils.ofxtools import import_ofx_to_database
 from .models import Bank, Account, Category, Transaction
 from .serializers import BankSerializer, AccountSerializer, CategorySerializer, TransactionSerializer
 
@@ -55,32 +49,3 @@ class TransactionViewSet(ModelViewSet):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-
-    #     training_path = r'D:\Documents\Administratif\Crédit_Agricole\Relevé_comptes\CA20221230_130042_compte_courant.csv'
-    #     training_dataset = parse_file(training_path)
-    #
-    #     predictor = CategoryPredictor(training_dataset, [transaction])
-
-
-class OFXUploadViewSet(ViewSet):
-    """
-    A ViewSet for uploading and processing OFX files.
-    """
-
-    @action(detail=False, methods=['post'], url_path='upload-ofx')
-    def upload_ofx_file(self, request):
-        """
-        Upload an OFX file to be parsed
-
-        :param request: request sent
-        :return: HttpResponse
-        """
-        if 'file' not in request.FILES:
-            return Response({'error': 'No file provided'}, status=status.HTTP_400_BAD_REQUEST)
-
-        file: UploadedFile = request.FILES['file']
-
-        executor = ThreadPoolExecutor()
-        executor.submit(import_ofx_to_database, file)
-
-        return Response(status=status.HTTP_200_OK)
