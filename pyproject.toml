@@ -13,16 +13,14 @@ keywords = ["finance", "budget", "management"]
 license = { text = "GPL-3.0" }
 classifiers = []
 dependencies = [
-  "Django>=5.2.8",
-  "djangorestframework>=3.16.1",
-  "django-filter>=25.2",
-  "django-extensions",
-  "drf_yasg>=1.21.11",
   "psycopg[binary]>=3.2.13",
-  "pytz>=2025.2",
   "ofxtools>=0.9.5",
   "transformers>=4.30.0",
   "torch>=2.0.0",
+  "fastapi>=0.100.0",
+  "uvicorn>=0.20.0",
+  "sqlmodel>=0.0.14",
+  "pydantic-settings>=2.0.0",
 ]
 
 [project.urls]
