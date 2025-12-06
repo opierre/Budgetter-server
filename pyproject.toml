@@ -23,6 +23,9 @@ dependencies = [
   "pydantic-settings>=2.0.0",
 ]
 
+[project.optional-dependencies]
+test = ["pytest>=7.12.0", "httpx>=0.28.1", "pytest-cov>=7.0.0"]
+
 [project.urls]
 repository = "https://github.com/opierre/Budgetter-server"
 
@@ -43,3 +46,10 @@ exclude = '''
   ^skeletons/
 )
 '''
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -q --cov=budgetter_server --cov-report=term-missing --cov-report html:cov_html"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+pythonpath = [".", "budgetter_server"]
