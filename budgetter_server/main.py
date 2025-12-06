@@ -3,10 +3,10 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
-from api.v1.api import api_router
-from core.config import settings
-from db.session import create_db_and_tables
-from models import Bank, Account, Category, Transaction  
+from budgetter_server.api.v1.api import api_router
+from budgetter_server.core.config import settings
+from budgetter_server.db.session import create_db_and_tables
+from budgetter_server.models import Bank, Account, Category, Transaction  
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):

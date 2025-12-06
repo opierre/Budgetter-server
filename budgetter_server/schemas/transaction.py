@@ -3,7 +3,7 @@ from decimal import Decimal
 from typing import Optional
 
 from pydantic import BaseModel, Field
-from models.sql_models import Mean, TransactionType
+from budgetter_server.models.sql_models import Mean, TransactionType
 
 class TransactionBase(BaseModel):
     """

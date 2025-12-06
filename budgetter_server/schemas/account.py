@@ -2,7 +2,7 @@ from datetime import date
 from typing import Optional
 
 from pydantic import BaseModel, Field
-from models.sql_models import AccountType, Status
+from budgetter_server.models.sql_models import AccountType, Status
 
 class AccountBase(BaseModel):
     """

@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlmodel import Session, select
 
-from db.session import get_session
-from models import Account
-from schemas.account import AccountCreate, AccountRead
+from budgetter_server.db.session import get_session
+from budgetter_server.models import Account
+from budgetter_server.schemas.account import AccountCreate, AccountRead
 
 router = APIRouter()
 

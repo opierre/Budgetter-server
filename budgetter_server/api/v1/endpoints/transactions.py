@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends
 from sqlmodel import Session, select
 
-from db.session import get_session
-from models import Transaction
-from schemas.transaction import TransactionCreate, TransactionRead
+from budgetter_server.db.session import get_session
+from budgetter_server.models import Transaction
+from budgetter_server.schemas.transaction import TransactionCreate, TransactionRead
 
 router = APIRouter()
 

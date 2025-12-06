@@ -2,7 +2,7 @@ from typing import Generator
 
 from sqlmodel import Session, create_engine, SQLModel
 
-from core.config import settings
+from budgetter_server.core.config import settings
 
 engine = create_engine(settings.DATABASE_URL)
 
