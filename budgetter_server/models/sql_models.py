@@ -1,6 +1,3 @@
-"""
-SQLModel database models for the Budgetter application.
-"""
 from enum import StrEnum
 import datetime
 from decimal import Decimal

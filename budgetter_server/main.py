@@ -6,7 +6,6 @@ from starlette.middleware.cors import CORSMiddleware
 from api.v1.api import api_router
 from core.config import settings
 from db.session import create_db_and_tables
-# Import models to ensure they are registered with SQLModel metadata
 from models import Bank, Account, Category, Transaction  
 
 @asynccontextmanager
