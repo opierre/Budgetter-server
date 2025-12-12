@@ -1,7 +1,7 @@
 from fastapi.testclient import TestClient
 from sqlmodel import Session, select
 
-from budgetter_server.models.sql_models import Transaction, Mean, TransactionType, AccountType, Status
+from budgetter_server.models import Transaction, Mean, TransactionType, AccountType, Status
 
 
 class TestTransactions:

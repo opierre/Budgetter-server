@@ -1,11 +1,15 @@
 from .sql_models import (
-    Bank, 
-    Account, 
-    Category, 
-    CategorizationRule, 
-    Transaction, 
-    Mean, 
-    TransactionType, 
-    AccountType, 
-    Status
+    Bank, BankBase,
+    Account, AccountBase, AccountType, Status,
+    Category, CategoryBase,
+    CategorizationRule, CategorizationRuleBase,
+    Transaction, TransactionBase, Mean, TransactionType
 )
+
+__all__ = [
+    "Bank", "BankBase",
+    "Account", "AccountBase", "AccountType", "Status",
+    "Category", "CategoryBase",
+    "CategorizationRule", "CategorizationRuleBase",
+    "Transaction", "TransactionBase", "Mean", "TransactionType"
+]

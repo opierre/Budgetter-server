@@ -1,8 +1,7 @@
 from fastapi.testclient import TestClient
 from sqlmodel import Session
 
-from budgetter_server.schemas.account import AccountCreate
-from budgetter_server.models.sql_models import AccountType, Status
+from budgetter_server.models import AccountType, Status, AccountBase
 
 
 class TestAccounts:
